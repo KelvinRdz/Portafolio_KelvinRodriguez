@@ -4,26 +4,82 @@
  */
 package Tecshop.Kelvin_Rdz.Service;
 
-import Tecshop.Kelvin_Rdz.domain.Categoria;
 import Tecshop.Kelvin_Rdz.Repository.CategoriaRepository;
+import Tecshop.Kelvin_Rdz.domain.Categoria;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
+    private final FirebaseStorageService firebaseStorageService;
 
-    public CategoriaService(CategoriaRepository categoriaRepository) {
+    public CategoriaService(CategoriaRepository categoriaRepository,
+            FirebaseStorageService firebaseStorageService) {
+
         this.categoriaRepository = categoriaRepository;
+        this.firebaseStorageService = firebaseStorageService;
     }
 
     @Transactional(readOnly = true)
     public List<Categoria> getCategorias(boolean activo) {
+
         if (activo) {
             return categoriaRepository.findByActivoTrue();
         }
+
         return categoriaRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Categoria> getCategoria(Integer idCategoria) {
+        return categoriaRepository.findById(idCategoria);
+    }
+
+    @Transactional
+    public void save(Categoria categoria, MultipartFile imagenFile) {
+
+        try {
+
+            categoria = categoriaRepository.save(categoria);
+
+            if (imagenFile != null && !imagenFile.isEmpty()) {
+
+                String rutaImagen = firebaseStorageService.uploadImage(
+                        imagenFile,
+                        "categoria",
+                        categoria.getIdCategoria());
+
+                categoria.setRutaImagen(rutaImagen);
+
+                categoriaRepository.save(categoria);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Error al subir la imagen a Firebase", e);
+        }
+    }
+
+    @Transactional
+    public void delete(Integer idCategoria) {
+
+        if (!categoriaRepository.existsById(idCategoria)) {
+            throw new IllegalArgumentException(
+                    "La categoría con ID " + idCategoria + " no existe.");
+        }
+
+        try {
+            categoriaRepository.deleteById(idCategoria);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalStateException(
+                    "No se puede eliminar la categoría. Tiene datos asociados.", e);
+        }
     }
 }
