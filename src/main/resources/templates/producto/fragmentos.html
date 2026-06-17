@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{general/plantilla :: head}"></head>
+
+<body>
+    <section th:fragment="agregar">
+        <div class='row py-4 mb-2 bg-light'>
+            <div class='col-md-1'></div>
+            <div class='col-md-3'>
+                <button type="button" class="btn btn-primary"
+                        data-bs-toggle="modal" data-bs-target="#agregarProductoModal">
+                    <i class="fa-solid fa-plus"></i> [[#{producto.agregar}]]</button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="agregarProductoModal" tabindex="-1"
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                            <i class="fa-solid fa-layer-group"></i> [[#{producto.agregar}]]</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form th:action='@{/producto/guardar}' th:object='${producto}'
+                          class='was-validated' enctype="multipart/form-data" method="post">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="idCategoria">[[#{producto.categoria}]]</label>
+                                <select name="idCategoria"
+                                        class="form-select"
+                                        aria-label="Default select example">
+                                    <option th:each="c : ${categorias}" th:value="${c.idCategoria}">
+                                        [[${c.descripcion}]]
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label>[[#{producto.descripcion}]]</label>
+                                <input type="text" name="descripcion" class='form-control' maxlength="50" required/>
+                            </div>
+                            <div class="mb-3">
+                                <label for="detalle">[[#{producto.detalle}]]</label>
+                                <textarea class="form-control" name="detalle" rows="3"></textarea>
+                            </div>
