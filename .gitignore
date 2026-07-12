@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 # Firebase
-src/main/resources/Firebase/*.json
+/src/main/resources/Firebase/*.json
