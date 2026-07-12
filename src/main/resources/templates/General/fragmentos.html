@@ -41,50 +41,63 @@
 
                                 <div class="collapse navbar-collapse" id="navbarMenu">
 
-                                    <ul class="navbar-nav me-auto">
+                                    <li class="nav-item px-2">
+                                        <a class="nav-link" th:href="@{/categoria/listado}">
+                                            [[#{plantilla.categorias}]]
+                                        </a>
+                                    </li>
 
-                                        <li class="nav-item">
-                                            <a class="nav-link"
-                                               th:href="@{/categoria/listado}">
-                                                [[#{plantilla.categorias}]]
-                                            </a>
-                                        </li>
+                                    <li class="nav-item px-2">
+                                        <a class="nav-link" th:href="@{/producto/listado}">
+                                            [[#{plantilla.productos}]]
+                                        </a>
+                                    </li>
 
-                                        <li class="nav-item">
-                                            <a class="nav-link"
-                                               th:href="@{/producto/listado}">
-                                                [[#{plantilla.productos}]]
-                                            </a>
-                                        </li>
+                                    <li class="nav-item px-2">
+                                        <a class="nav-link" th:href="@{/pruebas/listado}">
+                                            [[#{plantilla.asociaciones}]]
+                                        </a>
+                                    </li>
 
-                                        <li class="nav-item dropdown">
+                                    <li class="nav-item px-2">
+                                        <a class="nav-link" th:href="@{/consultas/listado}">
+                                            [[#{plantilla.consultas}]]
+                                        </a>
+                                    </li>
 
-                                            <a class="nav-link dropdown-toggle"
-                                               href="#"
-                                               role="button"
-                                               data-bs-toggle="dropdown">
+                                    <li class="nav-item px-2">
+                                        <a class="nav-link" th:href="@{/usuario/listado}">
+                                            [[#{plantilla.usuarios}]]
+                                        </a>
+                                    </li>
 
-                                                [[#{plantilla.extras}]]
+                                    <li class="nav-item px-2">
+                                        <a class="nav-link" th:href="@{/role/listado}">
+                                            [[#{plantilla.troles}]]
+                                        </a>
+                                    </li>
 
-                                            </a>
+                                    <li class="nav-item px-2">
+                                        <a class="nav-link" th:href="@{/usuario_role/asignar}">
+                                            [[#{plantilla.permisos}]]
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item px-2">
+                                        <a class="nav-link" th:href="@{/ruta/listado}">
+                                            [[#{plantilla.rutas}]]
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item px-2">
+                                        <a class="nav-link" th:href="@{/constante/listado}">
+                                            [[#{plantilla.constantes}]]
+                                        </a>
+                                    </li>
 
                                             <ul class="dropdown-menu">
 
-                                                <li>
-                                                    <a class="dropdown-item"
-                                                       th:href="@{/pruebas/listado}">
-                                                        [[#{plantilla.asociaciones}]]
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a class="dropdown-item"
-                                                       th:href="@{/pruebas/listado2}">
-                                                        [[#{plantilla.consultas}]]
-                                                    </a>
-                                                </li>
-
-                                            </ul>
+                                                <li class="nav-item px-2"><a class="nav-link" th:href="@{/consultas/listado}">[[#{plantilla.consultas}]]</a></li>
 
                                         </li>
 

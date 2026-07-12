@@ -20,6 +20,7 @@
 
     <properties>
         <java.version>19</java.version>
+        <start-class>Tecshop.Kelvin_Rdz.KelvinRdzApplication</start-class>
     </properties>
 
     <dependencies>
