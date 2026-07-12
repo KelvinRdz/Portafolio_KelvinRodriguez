@@ -25,9 +25,7 @@ public class Producto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto")
     private Integer idProducto;
-
-    @Column(name = "id_categoria")
-    private Integer idCategoria;
+    //private Integer idCategoria; ya no se usa por la anotación @ManyToOne
 
     @Column(nullable = false, length = 50)
     @NotBlank(message = "La descripción no puede estar vacía.")
@@ -39,17 +37,18 @@ public class Producto implements Serializable {
 
     @Column(precision = 12, scale = 2)
     @NotNull(message = "El precio no puede estar vacío.")
-    @DecimalMin(value = "0.01", inclusive = true,
-            message = "El precio debe ser mayor a 0.")
+    @DecimalMin(value = "0.01", inclusive = true, message = "El precio debe ser mayor a 0.")
     private BigDecimal precio;
 
-    @NotNull(message = "Las existencias no pueden estar vacías.")
-    @Min(value = 0,
-            message = "Las existencias deben ser mayores o iguales a 0.")
+    @NotNull(message = "El campo de existencias no puede estar vacío.")
+    @Min(value = 0, message = "Las existencias deben ser un número mayor o igual a 0.")
     private Integer existencias;
 
     @Column(name = "ruta_imagen", length = 1024)
     private String rutaImagen;
-
     private boolean activo;
+
+    @ManyToOne
+    @JoinColumn(name = "id_categoria")
+    private Categoria categoria;
 }

@@ -9,18 +9,34 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "categoria")
 public class Categoria implements Serializable {
+    
 
     private static final long serialVersionUID = 1L;
+
+    public Categoria() {
+    }
+
+    public Categoria(Integer idCategoria, String descripcion, String rutaImagen, Boolean activo, List<Producto> productos) {
+        this.idCategoria = idCategoria;
+        this.descripcion = descripcion;
+        this.rutaImagen = rutaImagen;
+        this.activo = activo;
+        this.productos = productos;
+    }
+    
+    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +54,8 @@ public class Categoria implements Serializable {
 
     @Column(name = "activo")
     private Boolean activo;
+
+    // Relación de uno a muchos con la clase Producto
+    @OneToMany(mappedBy = "categoria")
+    private List<Producto> productos;
 }
