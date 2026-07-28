@@ -4,11 +4,16 @@
  */
 package Tecshop.Kelvin_Rdz;
 
+import Tecshop.Kelvin_Rdz.Service.RutaService;
+import Tecshop.Kelvin_Rdz.domain.Ruta;
 import java.util.Locale;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -69,5 +74,42 @@ public class ProjectConfig implements WebMvcConfigurer {
         messageSource.setBasename("messages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
+    }
+
+    @Autowired
+    private RutaService rutaService;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        var rutas = rutaService.getRutas();
+        http.authorizeHttpRequests(requests -> {
+            for (Ruta ruta : rutas) {
+                if (ruta.isRequiereRol()) {
+                    requests.requestMatchers(ruta.getRuta()).hasRole(ruta.getRol().getRol());
+                } else {
+                    requests.requestMatchers(ruta.getRuta()).permitAll();
+                }
+            }
+            requests.anyRequest().authenticated();
+        });
+        http.formLogin(form -> form // Configuración de formulario de login
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/login?error=true")
+                .permitAll()
+        ).logout(logout -> logout // Configuración de logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout=true")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+        ).exceptionHandling(exceptions -> exceptions // Manejo de excepciones
+                .accessDeniedPage("/acceso_denegado")
+        ).sessionManagement(session -> session // Configuración de sesiones
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
+        );
+        return http.build();
     }
 }

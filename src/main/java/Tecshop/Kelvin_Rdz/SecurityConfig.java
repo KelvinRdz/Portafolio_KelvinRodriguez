@@ -1,7 +1,10 @@
 package Tecshop.Kelvin_Rdz;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,26 +62,11 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    //Este método será reemplazado la siguiente semana
-    @Bean
-    public UserDetailsService users(PasswordEncoder passwordEncoder) {
-        UserDetails juan = User.builder()
-                .username("juan")
-                .password(passwordEncoder.encode("123"))
-                .roles("ADMIN")
-                .build();
-        UserDetails rebeca = User.builder()
-                .username("rebeca")
-                .password(passwordEncoder.encode("456"))
-                .roles("VENDEDOR")
-                .build();
-        UserDetails pedro = User.builder()
-                .username("pedro")
-                .password(passwordEncoder.encode("789"))
-                .roles("USUARIO") // Consistent con tu configuración
-                .build();
-        return new InMemoryUserDetailsManager(juan, rebeca, pedro);
+    
+    @Autowired
+    public void configurerGlobal(AuthenticationManagerBuilder build,
+        @Lazy PasswordEncoder passwordEncoder,
+        @Lazy UserDetailsService userDetailsService) throws Exception {
+     build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
-
 }

@@ -131,14 +131,33 @@
                                         </li>
 
                                         <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                                <i class="fas fa-user"></i>
-                                                <span sec:authentication="name" class="ms-1"></span>
+                                            <a class="nav-link dropdown-toggle d-flex align-items-center"
+                                               href="#"
+                                               role="button"
+                                               data-bs-toggle="dropdown"
+                                               aria-expanded="false">
+
+                                                <img th:if="${session.imagenUsuario != null}"
+                                                     th:src="${session.imagenUsuario}"
+                                                     alt="Imagen de usuario"
+                                                     width="40"
+                                                     height="40"
+                                                     class="rounded-circle me-2"/>
+
+                                                <img th:unless="${session.imagenUsuario != null}"
+                                                     th:src="@{/images/user.png}"
+                                                     alt="Imagen de usuario"
+                                                     width="40"
+                                                     height="40"
+                                                     class="rounded-circle me-2"/>
+
+                                                <span sec:authentication="name"></span>
                                             </a>
-                                            <ul class="dropdown-menu">
+
+                                            <ul class="dropdown-menu dropdown-menu-end">
                                                 <li>
                                                     <form method="post" th:action="@{/logout}">
-                                                        <button class="btn nav-link" type="submit">
+                                                        <button class="dropdown-item" type="submit">
                                                             <i class="fas fa-sign-out-alt"></i>
                                                             <span class="ms-1">Logout</span>
                                                         </button>
@@ -146,44 +165,47 @@
                                                 </li>
                                             </ul>
                                         </li>
-
-                                        <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_VENDEDOR') or hasRole('ROLE_ADMIN')">
-                                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                                [[#{plantilla.roles}]]
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" th:href="@{/usuario/listado}">
-                                                        [[#{plantilla.usuarios}]]
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" th:href="@{/usuario_role/asignar}">
-                                                        [[#{plantilla.permisos}]]
-                                                    </a>
-                                                </li>
-                                            </ul>
                                         </li>
+                                    </ul>
+                                    </li>
 
-                                        <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                                [[#{plantilla.idioma}]]
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" th:href="@{/(lang=es)}">Español</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" th:href="@{/(lang=en)}">English</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" th:href="@{/(lang=fr)}">Français</a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" th:href="@{/(lang=pt)}">Português</a>
-                                                </li>
-                                            </ul>
-                                        </li>
+                                    <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_VENDEDOR') or hasRole('ROLE_ADMIN')">
+                                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                            [[#{plantilla.roles}]]
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" th:href="@{/usuario/listado}">
+                                                    [[#{plantilla.usuarios}]]
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" th:href="@{/usuario_role/asignar}">
+                                                    [[#{plantilla.permisos}]]
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                            [[#{plantilla.idioma}]]
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" th:href="@{/(lang=es)}">Español</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" th:href="@{/(lang=en)}">English</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" th:href="@{/(lang=fr)}">Français</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" th:href="@{/(lang=pt)}">Português</a>
+                                            </li>
+                                        </ul>
+                                    </li>
 
                                     </ul>
 
