@@ -42,6 +42,10 @@
                                         <label>[[#{usuario.correo}]]</label>
                                         <input type="email" class="form-control" name="correo" maxlength="75" th:field="*{correo}" required/>
                                     </div>
+                                    <div class="mb-3">
+                                        <label>[[#{usuario.password}]]</label>
+                                        <input type="password" class="form-control" name="password" maxlength="20" th:field="*{password}" required/>
+                                    </div>
                                 </div>
                                 <div class="card-footer text-end">                                                
                                     <button type="submit" class="btn btn-success">

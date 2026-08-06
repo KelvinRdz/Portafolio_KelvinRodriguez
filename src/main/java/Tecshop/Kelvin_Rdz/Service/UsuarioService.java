@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Tecshop.Kelvin_Rdz.Service;
 
 import Tecshop.Kelvin_Rdz.domain.Rol;
@@ -73,7 +69,7 @@ public class UsuarioService {
 
     @Transactional
     public void save(Usuario usuario, MultipartFile imagenFile, boolean encriptaClave) {
-        // Verificar si el correo ya existe, excluyendo el usuario actual
+        // Verificar si el correo ya existe, excluyendo el usuario actual        
         final Integer idUser = usuario.getIdUsuario();
         Optional<Usuario> usuarioDuplicado = usuarioRepository.findByUsernameOrCorreo(null, usuario.getCorreo());
         if (usuarioDuplicado.isPresent()) {
@@ -84,6 +80,7 @@ public class UsuarioService {
                 throw new DataIntegrityViolationException("El correo ya está en uso por otro usuario.");
             }
         }
+
         //Se valida si la clave se va actualizar o si es un usuario nuevo se debe actualizar...
         var asignarRol = false;
         if (usuario.getIdUsuario() == null) {
@@ -100,8 +97,8 @@ public class UsuarioService {
                 Usuario usuarioExistente = usuarioRepository.findById(usuario.getIdUsuario())
                         .orElseThrow(() -> new IllegalArgumentException("Usuario a modificar no encontrado."));
 
-                // Conservamos la contraseña existente tal cual, sin volver a encriptarla.
-                usuario.setPassword(usuarioExistente.getPassword());
+                // Asignamos la contraseña existente al objeto "usuario" antes de guardarlo.                
+                usuario.setPassword(encriptaClave ? passwordEncoder.encode(usuarioExistente.getPassword()) : usuarioExistente.getPassword());
             } else {
                 // El campo de password NO está vacío (se desea actualizar).
                 // Se encripta y se guarda la nueva contraseña.
@@ -109,7 +106,7 @@ public class UsuarioService {
             }
         }
         usuario = usuarioRepository.save(usuario);
-        if (imagenFile != null && !imagenFile.isEmpty()) { //Si no está vacío... pasaron una imagen...
+        if (imagenFile != null && !imagenFile.isEmpty()) { //Si no está vacío... pasaron una imagen...            
             try {
                 String rutaImagen = firebaseStorageService.uploadImage(
                         imagenFile, "usuario", usuario.getIdUsuario());
@@ -126,7 +123,6 @@ public class UsuarioService {
 
     @Transactional
     public void delete(Integer idUsuario) {
-
         // Verifica si la categoría existe antes de intentar eliminarlo
         if (!usuarioRepository.existsById(idUsuario)) {
             // Lanza una excepción para indicar que el usuario no fue encontrado
@@ -158,4 +154,28 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
+    //Sección para gestionar roles a usuarios...
+    
+    @Transactional(readOnly = true)
+    public List<String> getRolesNombres() {
+        // Retorna una lista de Strings con el nombre de cada rol
+        return rolRepository.findAll().stream()
+                .map(Rol::getRol)
+                .toList();
+    }
+
+    @Transactional
+    public Usuario eliminarRol(String username, Integer idRol) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(username);
+        if (usuarioOpt.isEmpty()) {
+            throw new RuntimeException("Usuario no encontrado: " + username);
+        }
+        Usuario usuario = usuarioOpt.get();
+
+        // Filtra la colección de roles del usuario para mantener solo los que NO coinciden con idRol
+        usuario.getRoles().removeIf(rol -> rol.getIdRol().equals(idRol));
+
+        // Guarda el usuario con la colección de roles modificada
+        return usuarioRepository.save(usuario);
+    }
 }

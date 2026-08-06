@@ -34,7 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
                 .requestMatchers(PUBLIC_URLS).permitAll()
-                .requestMatchers(USUARIO_URLS).hasRole("USUARIO")
+                .requestMatchers(USUARIO_URLS).hasRole("USER")
                 .requestMatchers(ADMIN_OR_VENDEDOR_URLS).hasAnyRole("ADMIN", "VENDEDOR")
                 .requestMatchers(ADMIN_URLS).hasRole("ADMIN")
                 .anyRequest().authenticated()
@@ -58,15 +58,16 @@ public class SecurityConfig {
         );
         return http.build();
     }
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
     @Autowired
     public void configurerGlobal(AuthenticationManagerBuilder build,
         @Lazy PasswordEncoder passwordEncoder,
         @Lazy UserDetailsService userDetailsService) throws Exception {
      build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+     // Añadimos un usuario en memoria para pruebas rápidas (usuario: test / contraseña: test)
+     build.inMemoryAuthentication()
+          .passwordEncoder(passwordEncoder)
+          .withUser("test")
+          .password(passwordEncoder.encode("test"))
+          .roles("USER");
     }
 }

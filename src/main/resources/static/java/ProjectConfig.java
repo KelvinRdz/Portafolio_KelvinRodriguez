@@ -1,4 +1,4 @@
-package com.tienda;
+package Tecshop.Kelvin_Rdz;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

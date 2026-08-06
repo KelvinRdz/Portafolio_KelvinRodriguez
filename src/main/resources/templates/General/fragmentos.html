@@ -96,6 +96,7 @@
                     </li>
                     <li class="nav-item my-auto">
                         <form method="post" th:action="@{/logout}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <button class="btn nav-link" type="submit">
                                 <i class="fas fa-sign-out-alt"></i>
                                 <span class="ms-1">Logout</span>
