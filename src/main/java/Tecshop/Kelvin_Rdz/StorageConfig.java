@@ -27,7 +27,7 @@ public class StorageConfig {
     @Bean
     public Storage storage() throws IOException {
 
-        String ruta = jsonPath + File.separator + jsonFile;
+        String ruta = jsonPath.replace("\\", "/") + "/" + jsonFile;
 
         ClassPathResource resource = new ClassPathResource(ruta);
 

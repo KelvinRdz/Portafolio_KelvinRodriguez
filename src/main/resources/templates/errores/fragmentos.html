@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"/>
+<body>
+    <header th:replace="~{general/fragmentos :: header}"></header>
+    <main class="container py-4">
+        <section th:fragment="errorMensaje">
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Error</h4>
+                <p th:text="${errorMensaje}">Ha ocurrido un error.</p>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="~{general/fragmentos :: footer}"></footer>
+</body>
+</html>

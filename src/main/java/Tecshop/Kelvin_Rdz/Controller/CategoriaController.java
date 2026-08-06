@@ -103,6 +103,6 @@ public class CategoriaController {
 
         model.addAttribute("categoria", categoriaOpt.get());
 
-        return "General/Categoria/Modificar";
+        return "General/Categoria/Modifica";
     }
 }

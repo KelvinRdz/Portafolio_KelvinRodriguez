@@ -26,7 +26,7 @@ public class ConsultaController {
     public String listado(Model model) {
         var lista = productoService.getProductos(false);
         model.addAttribute("productos", lista);
-        return "consultas/listado";
+        return "Consultas/listado";
     }
 
     @PostMapping("/consultaJPQL")
@@ -36,7 +36,7 @@ public class ConsultaController {
         model.addAttribute("productos", lista);
         model.addAttribute("precioInf", precioInf);
         model.addAttribute("precioSup", precioSup);
-        return "consultas/listado";
+        return "Consultas/listado";
     }
 
     @PostMapping("/consultaSQL")
@@ -46,6 +46,6 @@ public class ConsultaController {
         model.addAttribute("productos", lista);
         model.addAttribute("precioInf", precioInf);
         model.addAttribute("precioSup", precioSup);
-        return "consultas/listado";
+        return "Consultas/listado";
     }
 }
